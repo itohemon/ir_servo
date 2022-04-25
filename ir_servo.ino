@@ -2,26 +2,24 @@
 #define SERVO 12
 #define LED 13
 
-#include <Servo.h>
+#include <VarSpeedServo.h> 
 
-Servo myServo;
+VarSpeedServo myServo;    // create servo object to control a servo 
 
-int pulse_min = 544;
-int pulse_max = 2400;
-  
+#define BOTTOM_DEG 80
+
 void setup() {
   Serial.begin(9600);
   pinMode(IR, INPUT);
   pinMode(LED, OUTPUT);
 
-  myServo.attach(SERVO, pulse_min, pulse_max);
-  myServo.write(120);
-  myServo.detach();
+  myServo.attach(SERVO);
+  myServo.write(BOTTOM_DEG, 80, true);
 }
 
 void loop() {
   myServo.detach();
-
+  
   while (1) {
     bool ir = digitalRead(IR);
     Serial.println(ir);
@@ -47,11 +45,27 @@ void loop() {
   }
     
   delay(1500);
-  myServo.attach(SERVO, pulse_min, pulse_max);
-  myServo.write(30);
+
   digitalWrite(LED, LOW);
-  delay(270);
-  myServo.write(120);
-  digitalWrite(LED, HIGH);
+
+  myServo.attach(SERVO);
+  myServo.write(BOTTOM_DEG - 80, 200, true);
+  delay(50);
+  myServo.write(BOTTOM_DEG - 10, 200, true);
   delay(500);
+  myServo.write(BOTTOM_DEG - 20, 100, true);
+  delay(250);
+  myServo.write(BOTTOM_DEG - 10, 100, true);
+  delay(250);
+  myServo.write(BOTTOM_DEG - 20, 100, true);
+  delay(250);
+  myServo.write(BOTTOM_DEG - 10, 100, true);
+  delay(250);
+  myServo.write(BOTTOM_DEG - 20, 100, true);
+  delay(250);
+  myServo.write(BOTTOM_DEG, 100, true);
+  
+  digitalWrite(LED, HIGH);
+  
+  delay(1000);
 }
